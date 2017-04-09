@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BudgetReview</string>
+    <string name="hello_world">Hello World</string>
+    <string name="menu_item1">Home</string>
+    <string name="menu_item2">By Year</string>
+    <string name="menu_item3">By Ministry</string>
+</resources>
