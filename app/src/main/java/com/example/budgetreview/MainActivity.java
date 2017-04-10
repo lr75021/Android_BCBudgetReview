@@ -40,18 +40,12 @@ import com.google.gson.JsonPrimitive;
 
 // AppCompatActivity
 
-public class MainActivity extends Activity implements AsyncResponse, OnItemClickListener {
-
-    private ScrollView scrollView;
-    private TableLayout tableLayout;
-    AsyncTaskRunner runner = new AsyncTaskRunner();
+public class MainActivity extends Activity implements OnItemClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        runner.delegate = this;
 
         // initialize the utilities
         // Utils.init(this);
@@ -68,13 +62,6 @@ public class MainActivity extends Activity implements AsyncResponse, OnItemClick
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(this);
-
-
-/*
-        ScrollView scrollView = new ScrollView(this);
-
-        TableLayout tableLayout = new TableLayout(this);
-*/
     }
 
     @Override
@@ -117,8 +104,6 @@ public class MainActivity extends Activity implements AsyncResponse, OnItemClick
                 Toast.makeText(getApplicationContext(), getString(R.string.menu_item2) + " Selected",Toast.LENGTH_LONG).show();
 
                 // String sleepTime = time.getText().toString();
-                runner.execute();
-
                 return true;
 
             case R.id.item3:
@@ -129,51 +114,5 @@ public class MainActivity extends Activity implements AsyncResponse, OnItemClick
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    @Override
-    public void processFinish(String output) {
-        JsonObject item;
-        String strMinistry;
-
-        System.out.println(output);
-
-        JsonParser parser = new JsonParser();
-        JsonElement rootNode = parser.parse(output);
-        JsonArray details = rootNode.getAsJsonArray();
-
-        ScrollView scrollView = new ScrollView(this);
-
-        TableLayout tableLayout = new TableLayout(this);
-
-        for (int i = 0; i < details.size(); i++) {
-
-            TableRow tableRow = new TableRow(this);
-
-            TextView tv = new TextView(this);
-
-            tv.setPadding(10, 10, 10, 10);
-
-            tv.setGravity(Gravity.CENTER);
-
-            item = details.get(i).getAsJsonObject();
-            strMinistry = item.get("Ministry") + " - " + item.get("Budgeted");
-
-            tv.setText(strMinistry);
-
-            tableRow.addView(tv);
-
-            tableLayout.addView(tableRow);
-            View v = new View(this);
-            v.setLayoutParams(new TableRow.LayoutParams(
-                    TableRow.LayoutParams.MATCH_PARENT, 1));
-            v.setBackgroundColor(Color.rgb(51, 51, 51));
-            tableLayout.addView(v);
-        }
-
-        scrollView.addView(tableLayout);
-
-        setContentView(scrollView);
-    }
-
 
 }
