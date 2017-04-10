@@ -6,8 +6,6 @@ import android.os.Bundle;
  * Created by hwang on 4/9/2017.
  */
 
-// Check the github update here.
-
 public class HomeActivity extends DemoBase {
 
     @Override
