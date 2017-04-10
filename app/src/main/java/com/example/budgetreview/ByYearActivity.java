@@ -8,6 +8,8 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -16,12 +18,16 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,6 +35,7 @@ import com.google.gson.JsonParser;
 
 import com.github.mikephil.charting.charts.PieChart;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -55,7 +62,7 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
         tableLayout = new TableLayout(this);
 
         mChart = (PieChart) findViewById(R.id.chart1);
-        mChart.setUsePercentValues(true);
+        mChart.setUsePercentValues(false);
         mChart.getDescription().setEnabled(false);
         mChart.setExtraOffsets(5, 10, 5, 5);
 
@@ -85,9 +92,17 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
 
         // add a selection listener
         // mChart.setOnChartValueSelectedListener(this);
-
-        setData(4, 100);
-
+/*
+        int count = 4;
+        float mult = 100;
+        ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+        for (int i = 0; i < count ; i++) {
+            entries.add(new PieEntry((float) ((Math.random() * mult) + mult / 5),
+                    mParties[i % mParties.length],
+                    getResources().getDrawable(R.drawable.star)));
+        }
+        setData(entries);
+*/
         mChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
         // mChart.spin(2000, 0, 360);
 
@@ -110,11 +125,27 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
 
         runner.delegate = this;
 
-        // runner.execute();   // Get data from URL.
+        runner.execute();   // Get data from URL.
     }
 
-    private void setData(int count, float range) {
+    public class MyValueFormatter implements IValueFormatter {
 
+        private DecimalFormat mFormat;
+
+        public MyValueFormatter() {
+            mFormat = new DecimalFormat("###,###,###"); // use one decimal
+        }
+
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            // write your logic here
+            return mFormat.format(value) + " $"; // e.g. append a dollar-sign
+        }
+    }
+
+//  private void setData(int count, float range) {
+    private void setData(ArrayList<PieEntry> entries) {
+/*
         float mult = range;
 
         ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
@@ -126,8 +157,8 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
                     mParties[i % mParties.length],
                     getResources().getDrawable(R.drawable.star)));
         }
-
-        PieDataSet dataSet = new PieDataSet(entries, "Election Results");
+*/
+        PieDataSet dataSet = new PieDataSet(entries, "Budget");
 
         dataSet.setDrawIcons(false);
 
@@ -160,7 +191,7 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
         //dataSet.setSelectionShift(0f);
 
         PieData data = new PieData(dataSet);
-        data.setValueFormatter(new PercentFormatter());
+        data.setValueFormatter(new MyValueFormatter());      // (new PercentFormatter());
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.WHITE);
         data.setValueTypeface(mTfLight);
@@ -191,16 +222,22 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
 
         System.out.println(output);
 
+        ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+
         JsonParser parser = new JsonParser();
         JsonElement rootNode = parser.parse(output);
         JsonArray details = rootNode.getAsJsonArray();
 
-        ScrollView scrollView = new ScrollView(this);
-
-        TableLayout tableLayout = new TableLayout(this);
+        // ScrollView scrollView = new ScrollView(this);
+        // TableLayout tableLayout = new TableLayout(this);
 
         for (int i = 0; i < details.size(); i++) {
-
+            item = details.get(i).getAsJsonObject();
+            int value = Integer.parseInt(item.get("Budgeted").toString());
+            String label = item.get("Ministry").toString();
+            entries.add(new PieEntry(value, label,
+                        getResources().getDrawable(R.drawable.star)));
+            /*
             TableRow tableRow = new TableRow(this);
 
             TextView tv = new TextView(this);
@@ -209,7 +246,6 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
 
             tv.setGravity(Gravity.CENTER);
 
-            item = details.get(i).getAsJsonObject();
             strMinistry = item.get("Ministry") + " - " + item.get("Budgeted");
 
             tv.setText(strMinistry);
@@ -222,11 +258,47 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
                     TableRow.LayoutParams.MATCH_PARENT, 1));
             v.setBackgroundColor(Color.rgb(51, 51, 51));
             tableLayout.addView(v);
+*/
+
         }
+        setData(entries);
 
-        scrollView.addView(tableLayout);
+        // scrollView.addView(tableLayout);
 
-        setContentView(scrollView);
+        // setContentView(scrollView);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.by_year, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionSelY2011: {
+                break;
+            }
+            case R.id.actionSelY2012: {
+                break;
+            }
+            case R.id.actionSelY2013: {
+                break;
+            }
+            case R.id.actionSelY2014: {
+                break;
+            }
+            case R.id.actionSelY2015: {
+                break;
+            }
+            case R.id.actionSelY2016: {
+                break;
+            }
+            case R.id.actionSelY2017: {
+                break;
+            }
+        }
+        return true;
+    }
 }
