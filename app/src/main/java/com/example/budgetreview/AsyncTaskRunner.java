@@ -25,6 +25,7 @@ public class AsyncTaskRunner extends AsyncTask<String, String, String> {
     private String strJsonByYear;
     private String resp;
     ProgressDialog progressDialog;
+    public String strYear;
 
     public AsyncResponse delegate = null;
 
@@ -40,7 +41,8 @@ public class AsyncTaskRunner extends AsyncTask<String, String, String> {
             resp = "Slept for " + 1 + " seconds";
 
             // GatherDataFromURL();
-            strJsonByYear = reqBudgetByYear();
+            // String strYear = "2013";
+            strJsonByYear = reqBudgetByYear(strYear);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -156,11 +158,11 @@ public class AsyncTaskRunner extends AsyncTask<String, String, String> {
         }
     }
 
-    private String reqBudgetByYear() throws IOException {
+    private String reqBudgetByYear(String strYear) throws IOException {
         String strURL;
         // JsonObject item;
 
-        strURL = "http://52.25.205.73:8088/reqBudgetByYear?year=2013";
+        strURL = "http://52.25.205.73:8088/reqBudgetByYear?year=" + strYear;
         System.out.println("");
         System.out.println(">>> " + strURL);
         return readJsonString(strURL);

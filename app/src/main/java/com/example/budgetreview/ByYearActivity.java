@@ -47,7 +47,6 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
 
     private PieChart mChart;
 
-    AsyncTaskRunner runner = new AsyncTaskRunner();
     private ScrollView scrollView;
     private TableLayout tableLayout;
 
@@ -123,8 +122,9 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
         mChart.setEntryLabelTypeface(mTfRegular);
         mChart.setEntryLabelTextSize(12f);
 
+        AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.delegate = this;
-
+        runner.strYear = "2011";
         runner.execute();   // Get data from URL.
     }
 
@@ -299,6 +299,12 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
                 break;
             }
         }
+
+        AsyncTaskRunner runner = new AsyncTaskRunner();
+        runner.delegate = this;
+        runner.strYear = item.toString();       // "2013";
+        runner.execute();   // Get data from URL.
+
         return true;
     }
 }

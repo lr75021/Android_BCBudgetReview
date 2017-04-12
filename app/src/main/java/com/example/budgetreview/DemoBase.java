@@ -4,12 +4,15 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by hwang on 4/9/2017.
  */
 
-public abstract class DemoBase extends FragmentActivity {
+// FragmentActivity         -- Can't show title bar??
+// AppCompatActivity
+public abstract class DemoBase extends AppCompatActivity {
 
     protected String[] mMonths = new String[] {
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"
