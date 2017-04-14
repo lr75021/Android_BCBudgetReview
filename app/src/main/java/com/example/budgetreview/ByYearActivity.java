@@ -79,7 +79,7 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
         mChart.setHoleRadius(58f);
         mChart.setTransparentCircleRadius(61f);
 
-        mChart.setDrawCenterText(true);
+        mChart.setDrawCenterText(false);
 
         mChart.setRotationAngle(0);
         // enable rotation of the chart by touch
@@ -124,6 +124,7 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
 
         AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.delegate = this;
+        runner.reqType = AsyncTaskRunner.REQ_TYPE.reqBudgetByYear;
         runner.strYear = "2011";
         runner.execute();   // Get data from URL.
     }
@@ -165,6 +166,8 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
         dataSet.setSliceSpace(3f);
         dataSet.setIconsOffset(new MPPointF(0, 40));
         dataSet.setSelectionShift(5f);
+        dataSet.setDrawValues(false);       // not show Value
+        //mChart.setDrawEntryLabels(false);       // not show label
 
         // add a lot of colors
 
