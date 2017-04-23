@@ -21,6 +21,13 @@
         <activity android:name="HomeActivity"></activity>
         <activity android:name="ByYearActivity"></activity>
         <activity android:name="ByMinistryActivity"></activity>
+        <activity android:name="MinistryBudgetActivity"
+            android:label="@string/screen_title"
+            android:parentActivityName=".ByMinistryActivity"
+            android:uiOptions="splitActionBarWhenNarrow">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ByMinistryActivity" />
+        </activity>
     </application>
 
 </manifest>
