@@ -25,6 +25,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.FileUtils;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
@@ -35,10 +37,9 @@ import java.util.ArrayList;
 public abstract class SimpleFragment extends Fragment {
 
     private Typeface tf;
+    public JsonArray myList;
 
-    public SimpleFragment() {
-
-    }
+    public SimpleFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public abstract class SimpleFragment extends Fragment {
     protected BarData generateBarData(int dataSets, float range, int count) {
 
         ArrayList<IBarDataSet> sets = new ArrayList<IBarDataSet>();
-
+/*
         for(int i = 0; i < dataSets; i++) {
 
             ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
@@ -64,6 +65,18 @@ public abstract class SimpleFragment extends Fragment {
             ds.setColors(ColorTemplate.VORDIPLOM_COLORS);
             sets.add(ds);
         }
+*/
+        JsonObject item;
+        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+        for (int i = 0; i < myList.size(); i++) {
+            item = myList.get(i).getAsJsonObject();
+            int value = Integer.parseInt(item.get("Budgeted").toString());
+            String label = item.get("Year").toString();
+            entries.add(new BarEntry(i, value, label));
+        }
+        BarDataSet ds = new BarDataSet(entries, "Ministry");
+        ds.setColors(ColorTemplate.VORDIPLOM_COLORS);
+        sets.add(ds);
 
         BarData d = new BarData(sets);
         d.setValueTypeface(tf);

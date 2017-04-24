@@ -64,6 +64,7 @@ public class AsyncTaskRunner extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String result) {
+
         delegate.processFinish(strJsonResult);
     }
 

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.google.gson.JsonArray;
 
 /**
  * Created by hwang on 4/22/2017.
@@ -20,8 +21,10 @@ import com.github.mikephil.charting.components.Legend;
 
 public class PieChartFrag extends SimpleFragment {
 
-    public static Fragment newInstance() {
-        return new PieChartFrag();
+    public static Fragment newInstance(JsonArray list) {
+        PieChartFrag pcf = new PieChartFrag();
+        pcf.myList = list;
+        return pcf;
     }
 
     private PieChart mChart;

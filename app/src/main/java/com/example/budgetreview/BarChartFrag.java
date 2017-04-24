@@ -16,14 +16,18 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.google.gson.JsonArray;
 
 /**
  * Created by hwang on 4/22/2017.
  */
 public class BarChartFrag extends SimpleFragment implements OnChartGestureListener {
 
-    public static Fragment newInstance() {
-        return new BarChartFrag();
+    public static Fragment newInstance(JsonArray list) {
+
+        BarChartFrag bcf = new BarChartFrag();
+        bcf.myList = list;
+        return bcf;
     }
 
     private BarChart mChart;

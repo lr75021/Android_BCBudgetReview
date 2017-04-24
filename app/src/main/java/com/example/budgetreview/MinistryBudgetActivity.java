@@ -3,6 +3,7 @@ package com.example.budgetreview;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 // import android.support.v4.app.FragmentStatePagerAdapter;
@@ -24,6 +25,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by hwang on 4/16/2017.
@@ -45,6 +48,7 @@ public class MinistryBudgetActivity extends DemoBase implements AsyncResponse {
      */
     private ViewPager mPager;
     private JsonArray myList;
+    PageAdapter myPA;
 
     /**
      * The pager adapter, which provides the pages to the view pager widget.
@@ -59,12 +63,6 @@ public class MinistryBudgetActivity extends DemoBase implements AsyncResponse {
 
         setContentView(R.layout.activity_ministry_budget);
 
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(3);
-
-        PageAdapter a = new PageAdapter(getSupportFragmentManager());
-        pager.setAdapter(a);
-
         Intent i = getIntent();
         strMinistry = i.getExtras().getString("Ministry");
         System.out.println(strMinistry);
@@ -75,6 +73,7 @@ public class MinistryBudgetActivity extends DemoBase implements AsyncResponse {
         runner.reqType = AsyncTaskRunner.REQ_TYPE.reqBudgetByMinistry;
         runner.strMinistry = strMinistry;
         runner.execute();   // Get data from URL.
+
 /*
 
         // Instantiate a ViewPager and a PagerAdapter.
@@ -131,6 +130,14 @@ public class MinistryBudgetActivity extends DemoBase implements AsyncResponse {
             String budgeted = item.get("Budgeted").toString();
             objects.add(new ContentItem(year, budgeted));
         }
+
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setOffscreenPageLimit(3);
+
+        myPA = new PageAdapter(getSupportFragmentManager());
+        myPA.myList = myList;
+        pager.setAdapter(myPA);
+
 /*
         MyAdapter adapter = new MyAdapter(this, objects);
 
@@ -211,6 +218,8 @@ public class MinistryBudgetActivity extends DemoBase implements AsyncResponse {
      */
     private class PageAdapter extends FragmentPagerAdapter {
 
+        public  JsonArray myList;
+
         public PageAdapter(android.support.v4.app.FragmentManager fm) {
             super(fm);
         }
@@ -221,13 +230,13 @@ public class MinistryBudgetActivity extends DemoBase implements AsyncResponse {
 
             switch(pos) {
                 case 0:
-                    f = SineCosineFragment.newInstance();
+                    f = SineCosineFragment.newInstance(myList);
                     break;
                 case 1:
-                    f = BarChartFrag.newInstance();
+                    f = BarChartFrag.newInstance(myList);
                     break;
                 case 2:
-                    f = PieChartFrag.newInstance();
+                    f = PieChartFrag.newInstance(myList);
                     break;
             }
 

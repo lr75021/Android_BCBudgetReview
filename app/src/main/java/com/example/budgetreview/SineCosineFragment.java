@@ -11,6 +11,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.google.gson.JsonArray;
 
 /**
  * Created by hwang on 4/22/2017.
@@ -18,8 +19,11 @@ import com.github.mikephil.charting.components.YAxis;
 
 public class SineCosineFragment extends SimpleFragment {
 
-    public static Fragment newInstance() {
-        return new SineCosineFragment();
+    public static Fragment newInstance(JsonArray list)  {
+
+        SineCosineFragment scf = new SineCosineFragment();
+        scf.myList = list;
+        return scf;
     }
 
     private LineChart mChart;
