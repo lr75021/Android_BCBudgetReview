@@ -230,14 +230,16 @@ public class MinistryBudgetActivity extends DemoBase implements AsyncResponse {
 
             switch(pos) {
                 case 0:
-                    f = SineCosineFragment.newInstance(myList);
+                    //f = SineCosineFragment.newInstance(myList);
+                    f = TableFrag.newInstance(myList);
                     break;
                 case 1:
                     f = BarChartFrag.newInstance(myList);
                     break;
-                case 2:
+                /*case 2:
                     f = PieChartFrag.newInstance(myList);
                     break;
+                */
             }
 
             return f;
@@ -245,7 +247,7 @@ public class MinistryBudgetActivity extends DemoBase implements AsyncResponse {
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
     }
 

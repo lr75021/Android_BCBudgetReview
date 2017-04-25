@@ -305,7 +305,8 @@ public class ByYearActivity extends DemoBase implements AsyncResponse{
 
         AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.delegate = this;
-        runner.strYear = item.toString();       // "2013";
+        runner.reqType = AsyncTaskRunner.REQ_TYPE.reqBudgetByYear;
+        runner.strYear = item.toString().replaceAll("\"", "");       // "2013";
         runner.execute();   // Get data from URL.
 
         return true;
